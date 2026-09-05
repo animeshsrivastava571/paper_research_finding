@@ -1,0 +1,17 @@
+# Paper full texts — regenerable, bulky (~2MB), and not all redistributable.
+# SkillRouter (2603.22455) is under arXiv's default licence, which does not
+# grant redistribution rights. Regenerate locally; see CLAUDE.md conventions.
+papers/
+
+# Local Claude Code settings
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+libs/
+.venv/
+venv/
+
+# macOS
+.DS_Store
