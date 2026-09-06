@@ -21,19 +21,31 @@ Working repo for the research track of the Foundation Model Systems roadmap (v4)
 
 Full working context in [`CLAUDE.md`](CLAUDE.md).
 
-## Where the premise landed
+## Where it landed
 
-The original claim — *existing systems store capability profiles rather than routing decisions* — **did not survive**. BoundaryRouter and FlyRoute both keep and retrieve decision-level evidence, and BoundaryRouter's ablation already publishes the "experience beats profiles" result.
+The original claim — *existing systems store capability profiles rather than routing decisions* — **did not survive**. BoundaryRouter and FlyRoute both keep and retrieve decision-level evidence, and BoundaryRouter's ablation already shows "experience beats profiles".
 
-What survives is narrower and better defined: nobody stores the **contested set**, nobody evaluates **drift** in routing (FlyRoute names this as its own open limitation), versioning-vs-distillation is genuinely untried, and **"no route"** is missing from every label space examined.
+What replaced it, after six papers read end to end: **every routing memory system can add records, and none can retire one while keeping it.**
+
+| System | How memory is maintained | Old record survives? |
+|---|---|---|
+| FlyRoute | distils successes into a description | no — compressed away |
+| Agent-as-a-Router | appends to a kNN vector store | nothing is ever retired |
+| GraphPlanner | blends into GNN node embeddings | no — *"no explicit temporal edges"* |
+| GLOVE | `D ← D \ N` | no — explicitly deleted |
+
+Four unrelated architectures, the same gap. And nobody evaluates drift: the field solves **cold start** (a new agent, no history) and leaves **drift** (an existing agent whose history is now wrong) untouched.
+
+The proposal is in [`ideas/01-versioned-routing-memory.md`](ideas/01-versioned-routing-memory.md).
 
 ## Layout
 
 ```
-ideas/     proposed work, numbered — start here
-notes/     working notes, numbered in reading order
-papers/    extracted full text of papers read end to end
-papers/raw/  source HTML as downloaded
+ideas/       proposed work, numbered — start here
+notes/       working notes, numbered in reading order
+summaries/   per-paper walkthroughs, each with a relevance verdict
+scripts/     fetch_papers.sh regenerates the gitignored paper texts
+papers/      extracted full text of papers read end to end (gitignored)
 ```
 
 Papers are stored as text because the premise questions turn on method-section details — what the memory unit is, what enters the store, what is dropped — that abstracts consistently misrepresent.
