@@ -78,6 +78,24 @@ Starting point, not a blank page: BoundaryRouter's ground-truth rule already res
 
 ---
 
+## Landscape — bigger than the roadmap's list
+
+`notes/02-landscape-survey.md`. The roadmap names four papers; there are at least **ten** directly relevant, Feb 2025 – Aug 2026. Beyond the roadmap's list: **Agent-as-a-Router** (2606.22902, deployment-experience memory via a C-A-F loop — critiques static routers in nearly our words), **GraphPlanner** (2604.23626, graph memory over query–agent–response interactions), **TRACE-Router** (2607.22465), **Symphony-Coord** (2602.00966), MasRouter, AgentRouter, SLMs-as-Routers, AdaptOrch, and **Tool-to-Agent Retrieval** (2511.01854 — was on the roadmap's list, unread until now).
+
+Venue status still holds across all of them: no venues, no journal refs. GraphPlanner is ICLR-*formatted*, not ICLR-accepted (its only ICLR mention is the template's Code of Ethics).
+
+### The bandit problem — confront this directly
+
+Symphony-Coord, TRACE-Router and Iterative Critique-and-Routing all frame routing as a **contextual bandit with delayed feedback**. Bandits handle non-stationarity *by construction* (sliding-window UCB, discounted UCB). So **"nobody handles drift" is under real threat** — and from the bandit literature, not from FlyRoute. A reviewer will raise this immediately.
+
+**The counter, which is also the experiment:** a bandit adapts *statistically* (needs N failures for the estimate to move) and *by forgetting* (discounts the old record away). A version stamp needs **zero** samples — a deploy event invalidates the affected entries instantly — and preserves the record so you can still ask when the boundary moved. Same objection as FlyRoute's distillation, arriving by a different route.
+
+Drift experiment, sharpened: *after a capability shift, how many queries until routing recovers?* Bandit = O(re-convergence), FlyRoute = worse (successes only, cannot record degradation), versioned memory + deploy hook ≈ 0.
+
+**Baselines must change.** The roadmap's set (FlyRoute, BoundaryRouter, retrieve-and-rerank) is insufficient. Add a **LinUCB contextual bandit** and a **discounted/sliding-window bandit** — the latter is the strongest drift baseline and the one to beat. Without it the drift result isn't credible.
+
+**Do not pitch or draft until Agent-as-a-Router and GraphPlanner have been read end to end.** Either could reshape the contribution again.
+
 ## How to weight the four papers
 
 The track is about routing between **similar, overlapping** agents (horizontal — which peer owns this?), not about escalating between capability tiers (vertical — is this hard enough to need help?). That distinction decides how much each paper matters:
@@ -121,8 +139,11 @@ papers/raw/  source HTML as downloaded
 |---|---|
 | Premise verification (roadmap's "read before committing" gate) | **done** — `notes/01-premise-verification.md` |
 | FlyRoute summary | **done** — `summaries/flyroute.md` |
-| BoundaryRouter / SkillRouter / R3-Skill summaries | not started |
-| GLOVE end-to-end read | not started — promoted to premise risk |
+| BoundaryRouter summary | **done** — `summaries/boundaryrouter.md` |
+| SkillRouter / R3-Skill summaries | not started (low priority — background only) |
+| Landscape survey | **done** — `notes/02-landscape-survey.md` |
+| GLOVE end-to-end read | not started — premise risk |
+| Agent-as-a-Router + GraphPlanner reads | **not started — blocks pitching/drafting** |
 | Close-call ground truth | **not started — blocks everything downstream** |
 | Drift benchmark spec | not started |
 | CBA disclosure review | not started — long lead time, start early |
