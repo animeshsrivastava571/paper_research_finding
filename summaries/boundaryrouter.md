@@ -6,6 +6,17 @@
 **Venue:** none — **unreviewed preprint**
 **Full text:** `papers/2605.07180.txt`
 
+> **Relevance to our track: a citation and a fence — not a competitor.**
+>
+> Their two options are maximally *dissimilar* (a 4s LLM vs a 4.5-minute agent, 60× cost apart). That's a **vertical** decision: is this hard enough to escalate? Ours is **horizontal**: several similar-cost agents with overlapping territory — which one owns this?
+>
+> Three things transfer, and nothing else does:
+> 1. **It fences off a claim.** Propose "route from remembered behaviour rather than static descriptions" and a reviewer cites this paper, different setting or not.
+> 2. **The *shape* of their tie-break rule** — correctness first, then a secondary criterion. Their criterion is speed, which only works because their options differ 60×. Similar-cost agents need a different second axis (authority, ownership, blast radius).
+> 3. **A citable negative result:** even this easy setting isn't solved. *"Routing is surprisingly still a relatively hard problem."* If the two-way maximally-separated case is open, the N-way overlapping case clearly is.
+>
+> Note the word **"boundary"** means something different here — the edge of one system's competence, not the line between two peers' territories. Worth naming that distinction explicitly in our write-up.
+
 ---
 
 ## 1. In one line

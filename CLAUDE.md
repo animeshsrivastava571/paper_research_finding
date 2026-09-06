@@ -78,6 +78,19 @@ Starting point, not a blank page: BoundaryRouter's ground-truth rule already res
 
 ---
 
+## How to weight the four papers
+
+The track is about routing between **similar, overlapping** agents (horizontal — which peer owns this?), not about escalating between capability tiers (vertical — is this hard enough to need help?). That distinction decides how much each paper matters:
+
+| Paper | Role |
+|---|---|
+| **FlyRoute** | **The competitor.** Same problem, same enterprise setting. Read hardest. |
+| **BoundaryRouter** | A **citation and a fence**, not a competitor. Binary LLM-vs-agent escalation, options 60× apart in cost. Transfers: it blocks the "memory beats descriptions" claim; the *shape* of its tie-break rule (correctness, then a secondary criterion — but speed only works because its options differ 60×, so we need a different second axis); and a citable negative result that even this easy setting is unsolved. |
+| **SkillRouter** | Background. Supports "descriptions are lossy" (hiding the skill body costs 37–44pp) and nothing else. |
+| **R3-Skill** | Probably not relevant — its "rejection" is skill-set incompatibility, not declining to route. |
+
+Note "boundary" is used differently by BoundaryRouter (the edge of one system's competence) than by us (the line between two peers' territories). Name that distinction explicitly in the write-up.
+
 ## Repo conventions
 
 ```
