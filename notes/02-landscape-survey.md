@@ -83,3 +83,54 @@ Without a bandit baseline the drift result is not credible.
 - [ ] Revisit whether "nobody stores the contested set" survives GraphPlanner's query–agent–response graph
 
 **Do not pitch or draft until Agent-as-a-Router and GraphPlanner have been read.** Either could reshape the contribution again.
+
+---
+
+## Agent-as-a-Router (ACRouter) — read in full, 6 Sep 2026
+
+[2606.22902](https://arxiv.org/abs/2606.22902) v3, Jun 2026, cs.AI, 39pp "living technical report". No venue. Full text: `/tmp/aar.txt` (re-fetch via arxiv.org/html/2606.22902v3).
+
+**This is the closest published work to our idea — closer than FlyRoute.**
+
+### What it does
+
+Routes coding tasks across LLM providers (GPT / Claude / Gemini / Qwen / GLM / Kimi). Diagnoses existing routers as suffering **"information deficit"** — *"static routers are structurally unable to [acquire execution-grounded information] since their information state is frozen."* Nearly our critique, in their words.
+
+Architecture: **C-A-F loop** (Context → Action → Feedback → Context), three modules — Orchestrator (decides), Verifier (runs code in a sandbox), Memory (accumulates).
+
+### Its memory is decision-level, with outcomes
+
+> *"Memory is an online vector store keyed by task embeddings (voyage-code-3 / BGE-large) whose value logs the chosen model, performance, cost, and verification traces."* Retrieved by cosine kNN.
+
+| | Memory unit | Failures kept? |
+|---|---|---|
+| FlyRoute | (query, response, score) → one agent | no, quality-gated out |
+| BoundaryRouter | (query, both answers, both latencies) | no outcome stored |
+| **ACRouter** | (task → **chosen model**, performance, cost, trace) | **yes** |
+
+**Their feedback signal is execution, not a judge.** Coding gives ground truth free — tests pass or fail. We are in FlyRoute's situation, not theirs: no test suite for a bank guarantee answer. Our feedback problem is strictly harder.
+
+### What this takes from us
+
+1. **The bandit comparison is done.** They ran LinUCB and LinTS. Regret: bandits 297–307, static 284–317, **ACRouter 205.5**. Their reading: bandits *"lack the context-aware reasoning that Orchestrator and Memory provide."* So "memory beats bandits" is no longer ours to claim — though it does validate the direction.
+2. **Cumulative regret as the streaming metric is taken.** They close by framing C-A-F as *"naturally formalizable as a contextual bandit with cumulative regret as its streaming metric."* This was going to be our close-call grading proposal.
+
+### What survives — checked their Limitations section directly
+
+Their limitations cover cost estimation and step limits. **No capability-drift experiment.** Their "OOD" test is new *task types* (SWE-bench Verified), not changed *models*.
+
+- ✅ **Drift under capability shift** — still open. FlyRoute and ACRouter both skip it.
+- ✅ **Versioning / supersession** — still open. Append-only kNN vector store, no invalidation, no validity intervals.
+- ✅ **Declining to route** — still open.
+- ⚠️ **Contested set** — weakened. Regret implicitly handles "several would have worked", though they never study the contested case as such.
+
+### The gift
+
+On adding or changing a model:
+
+> *"New models need responses + scoring."*
+> *"In V2, new models join by generating responses on the existing task set."*
+
+**They re-run the entire benchmark against a changed model.** Brute force, full re-evaluation, no incremental invalidation — and they don't present this as a limitation. That cost is precisely what versioning removes. Their own operating practice demonstrates the problem we propose to solve.
+
+Also note they acknowledge the setting is inherently non-stationary — *"Each new model generation introduces new strengths (GLM-5 on algorithms, Qwen3-Max on test generation, Kimi-K2.5 on data science)"* — without ever measuring adaptation to it.

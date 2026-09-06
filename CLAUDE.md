@@ -94,7 +94,11 @@ Drift experiment, sharpened: *after a capability shift, how many queries until r
 
 **Baselines must change.** The roadmap's set (FlyRoute, BoundaryRouter, retrieve-and-rerank) is insufficient. Add a **LinUCB contextual bandit** and a **discounted/sliding-window bandit** — the latter is the strongest drift baseline and the one to beat. Without it the drift result isn't credible.
 
-**Do not pitch or draft until Agent-as-a-Router and GraphPlanner have been read end to end.** Either could reshape the contribution again.
+**Agent-as-a-Router (ACRouter, 2606.22902) is now the closest competitor — closer than FlyRoute.** Its Memory logs *the chosen model, performance, cost and verification traces*, keyed by task embedding: decision-level, outcomes included, failures kept. It also already beat LinUCB/LinTS bandits (regret 205.5 vs 297–307) and already uses **cumulative regret** as its streaming metric — so both the bandit comparison and regret-as-metric are taken.
+
+Still open after reading it: **drift under capability shift** (their OOD is new *task types*, not changed models), **versioning** (append-only kNN store, no invalidation), and **declining**. And they hand us the motivation: when a model changes they *re-run the whole benchmark against it* — brute-force re-evaluation with no incremental invalidation, not presented as a limitation.
+
+**Do not pitch or draft until GraphPlanner has been read end to end.**
 
 ## How to weight the four papers
 
@@ -143,7 +147,8 @@ papers/raw/  source HTML as downloaded
 | SkillRouter / R3-Skill summaries | not started (low priority — background only) |
 | Landscape survey | **done** — `notes/02-landscape-survey.md` |
 | GLOVE end-to-end read | not started — premise risk |
-| Agent-as-a-Router + GraphPlanner reads | **not started — blocks pitching/drafting** |
+| Agent-as-a-Router read | **done** — closest competitor; see notes/02 |
+| GraphPlanner read | **not started — blocks pitching/drafting** |
 | Close-call ground truth | **not started — blocks everything downstream** |
 | Drift benchmark spec | not started |
 | CBA disclosure review | not started — long lead time, start early |
