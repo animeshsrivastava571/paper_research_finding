@@ -134,3 +134,39 @@ On adding or changing a model:
 **They re-run the entire benchmark against a changed model.** Brute force, full re-evaluation, no incremental invalidation — and they don't present this as a limitation. That cost is precisely what versioning removes. Their own operating practice demonstrates the problem we propose to solve.
 
 Also note they acknowledge the setting is inherently non-stationary — *"Each new model generation introduces new strengths (GLM-5 on algorithms, Qwen3-Max on test generation, Kimi-K2.5 on data science)"* — without ever measuring adaptation to it.
+
+---
+
+## GraphPlanner — read in full, 6 Sep 2026
+
+[2604.23626](https://arxiv.org/abs/2604.23626), Apr 2026, UIUC. Preprint, ICLR-formatted, not accepted. Full summary: `summaries/graphplanner.md`.
+
+**Not a competitor.** Its "agents" are fixed workflow roles (Planner / Executor / Summarizer) and the task is composing a pipeline and staffing each stage with an LLM backbone — not deciding which of several overlapping specialists owns a query.
+
+**But it settles the versioning claim.** GARNet stores queries, roles and responses, with edges *"enriched with task performance and cost information"* — genuinely rich interaction memory over multi-agent routing. And it has **no temporal structure**:
+
+> *"This implicitly connects different rounds through shared neighbors rather than **explicit temporal edges**."*
+
+No dates, no ordering, no way to invalidate a range. History is averaged into node embeddings by message passing.
+
+### The pattern is now three for three
+
+| System | How memory is maintained | Can you invalidate a date range? |
+|---|---|---|
+| FlyRoute | distils successes into a description | no — compression destroys the record |
+| Agent-as-a-Router | appends to a kNN vector store | no — append-only, nothing is retired |
+| GraphPlanner | blends into GNN node embeddings | no — no temporal edges at all |
+
+Three different architectures — LLM-prompt, vector store, graph network — and **none can express "this is out of date from here."** That is a much stronger statement than "FlyRoute distils," and it is the core of the versioning argument.
+
+### A distinction worth naming in the write-up
+
+GraphPlanner generalises zero-shot to **unseen** LLMs. That is **cold start** — a new agent joins the pool. It is *not* **drift** — an existing agent's behaviour changes.
+
+Papers conflate these routinely, and reviewers will too. Define them apart early:
+- **Cold start:** a new agent, no history. Solved (FlyRoute seeds, GraphPlanner zero-shot).
+- **Drift:** an existing agent with history that is now wrong. **Unaddressed everywhere.**
+
+Our contribution is entirely in the second, and the confusion is a live risk to how the work is read.
+
+Also note the direction of their future work — *"richer agent profiles"*. The field is drifting back toward profiles, not decisions.

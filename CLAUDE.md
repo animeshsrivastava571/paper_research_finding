@@ -98,7 +98,15 @@ Drift experiment, sharpened: *after a capability shift, how many queries until r
 
 Still open after reading it: **drift under capability shift** (their OOD is new *task types*, not changed models), **versioning** (append-only kNN store, no invalidation), and **declining**. And they hand us the motivation: when a model changes they *re-run the whole benchmark against it* — brute-force re-evaluation with no incremental invalidation, not presented as a limitation.
 
-**Do not pitch or draft until GraphPlanner has been read end to end.**
+**GraphPlanner (2604.23626) is not a competitor** — its "agents" are workflow roles (Planner/Executor/Summarizer), not overlapping specialists. But it settles the versioning claim: GARNet connects history *"through shared neighbors rather than explicit temporal edges"*, so it has no dates and no way to invalidate a range.
+
+**The versioning claim is now three for three.** FlyRoute distils into a description, ACRouter appends to a kNN store, GraphPlanner blends into GNN embeddings — three unrelated architectures, none able to express "this is out of date from here." Much stronger than "FlyRoute distils."
+
+**Name this distinction early, in the write-up and in any pitch:**
+- **Cold start** — a new agent, no history. *Solved* (FlyRoute seeds, GraphPlanner zero-shot to unseen LLMs).
+- **Drift** — an existing agent with history that is now wrong. *Unaddressed everywhere.*
+
+Papers and reviewers conflate the two constantly; our contribution lives entirely in the second. The landscape is now mapped well enough to commit.
 
 ## How to weight the four papers
 
@@ -148,7 +156,7 @@ papers/raw/  source HTML as downloaded
 | Landscape survey | **done** — `notes/02-landscape-survey.md` |
 | GLOVE end-to-end read | not started — premise risk |
 | Agent-as-a-Router read | **done** — closest competitor; see notes/02 |
-| GraphPlanner read | **not started — blocks pitching/drafting** |
+| GraphPlanner read | **done** — not a competitor; see summaries/graphplanner.md |
 | Close-call ground truth | **not started — blocks everything downstream** |
 | Drift benchmark spec | not started |
 | CBA disclosure review | not started — long lead time, start early |
