@@ -16,9 +16,11 @@ The roadmap's claim — *"existing systems store capability profiles rather than
 
 - **BoundaryRouter** retrieves per-query behavioural records at routing time.
 - **FlyRoute** retrieves per-agent success exemplars at routing time.
-- BoundaryRouter's own ablation already publishes "experience beats static profiles" (profile-only variant: 0.41–0.57; full method: 0.65–0.75).
+- BoundaryRouter's own ablation already shows "experience beats static profiles" (profile-only variant: 0.41–0.57; full method: 0.65–0.75).
 
-**Do not reintroduce "remember decisions, not descriptions" as the novelty claim.** It's taken.
+**Do not reintroduce "remember decisions, not descriptions" as the novelty claim.** It's taken — an unreviewed arXiv preprint is still public, dated, citable prior art, and "it wasn't peer reviewed" is not a defence in review.
+
+**But separate the claim from the evidence.** That ablation rests on 87 questions, with the Base Set doubling as the retrieval memory (so two of three test sets are effectively tested on their own training data), no repeated runs and no confidence intervals. The *direction* is established; the *magnitude* is not. Don't quote their +27.5% as settled, and it is fair to say in related work that the evidence is thin.
 
 ### 2. Decision memory goes stale too — this nearly killed the project
 

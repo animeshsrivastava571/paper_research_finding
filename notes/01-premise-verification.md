@@ -13,7 +13,9 @@
 - **BoundaryRouter** retrieves per-query behavioural records to decide each route.
 - **FlyRoute** retrieves per-agent success exemplars alongside the profile.
 
-Worse for the original framing: **"decision-level evidence beats static profiles" is already published and measured.** BoundaryRouter's own ablation table is exactly that experiment — its `Prompt Routing` variant routes "based only on these capability profiles" and is the weakest of three variants across all three backbones (0.41–0.57 vs 0.65–0.75 for the full method). That claim is no longer available as a contribution.
+Worse for the original framing: **"decision-level evidence beats static profiles" has already been shown.** BoundaryRouter's own ablation table is exactly that experiment — its `Prompt Routing` variant routes "based only on these capability profiles" and is the weakest of three variants across all three backbones (0.41–0.57 vs 0.65–0.75 for the full method). That claim is no longer available as a contribution.
+
+**Caveat on strength of evidence.** BoundaryRouter is an unreviewed arXiv preprint (as are all the papers here — see Sources). That does *not* free up the claim: it is public, dated 8 May 2026, indexed and citable, and "it wasn't peer reviewed" is not a defence in review. But it does mean the result is unvetted, and it is thin — 87 questions, the Base Set doubling as the retrieval memory (so two of three test sets are effectively tested on their own training data), no repeated runs, no confidence intervals. **The direction is established; the magnitude is not.** Re-establishing it properly at N-agent scale is a legitimate component of a larger contribution, though not a paper on its own.
 
 **The project does not die, but the contribution moves.** It moves off *"decisions, not profiles"* and onto three narrower things that survive contact with the papers — and one of them is named as open by the closest competitor, in its own words.
 
