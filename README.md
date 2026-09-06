@@ -10,10 +10,13 @@ Working repo for the research track of the Foundation Model Systems roadmap (v4)
 |---|---|
 | Premise verification (roadmap's "read before committing" gate) | **done** — [`notes/01-premise-verification.md`](notes/01-premise-verification.md) |
 | FlyRoute walkthrough | **done** — [`summaries/flyroute.md`](summaries/flyroute.md) |
-| BoundaryRouter / SkillRouter / R3-Skill walkthroughs | not started |
-| GLOVE end-to-end read | not started — promoted to premise risk |
-| Ground-truth definition for contested routing cases | not started — **blocks everything downstream** |
-| Drift benchmark spec | not started |
+| BoundaryRouter, GraphPlanner, GLOVE walkthroughs | **done** — `summaries/` |
+| SkillRouter / R3-Skill walkthroughs | not started — background only, low priority |
+| Landscape survey | **done** — [`notes/02-landscape-survey.md`](notes/02-landscape-survey.md) |
+| GLOVE end-to-end read | **done** — [`summaries/glove.md`](summaries/glove.md) |
+| Ground-truth for contested cases | **dissolved for the paper** — defined by construction in simulation (the overlap region). Still open for the CBA product. |
+| **Idea 01 — versioned routing memory** | **designed** — [`ideas/01-versioned-routing-memory.md`](ideas/01-versioned-routing-memory.md) |
+| Build: simulated world + drift intervention | not started — next |
 | CBA disclosure review | not started — long lead, start early |
 
 Full working context in [`CLAUDE.md`](CLAUDE.md).
@@ -27,6 +30,7 @@ What survives is narrower and better defined: nobody stores the **contested set*
 ## Layout
 
 ```
+ideas/     proposed work, numbered — start here
 notes/     working notes, numbered in reading order
 papers/    extracted full text of papers read end to end
 papers/raw/  source HTML as downloaded

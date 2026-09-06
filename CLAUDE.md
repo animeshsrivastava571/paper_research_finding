@@ -145,6 +145,14 @@ papers/raw/  source HTML as downloaded
 
 ---
 
+## The plan
+
+**`ideas/01-versioned-routing-memory.md` is the current build plan.** Read it before proposing work. It carries the mechanism, the simulated-world design, baselines, the experiment, build order, publication assessment and the known objections.
+
+Two decisions recorded there that shape everything:
+- **Simulate the agents** for the main experiment. Exact capability control, reproducible, releasable. FlyRoute's fatal weakness is proprietary unreproducible data — don't inherit it. Real-LLM validation comes last and small.
+- **The contested-case blocker is dissolved for the paper** — in simulation, contested = the overlap of two agents' competence regions, decline = outside every region. Defined by construction, no annotator judgement. Still open for the CBA product.
+
 ## Status
 
 | Step | State |
@@ -157,8 +165,9 @@ papers/raw/  source HTML as downloaded
 | GLOVE end-to-end read | **done** — see summaries/glove.md |
 | Agent-as-a-Router read | **done** — closest competitor; see notes/02 |
 | GraphPlanner read | **done** — not a competitor; see summaries/graphplanner.md |
-| Close-call ground truth | **not started — blocks everything downstream** |
-| Drift benchmark spec | not started |
+| Close-call ground truth | **dissolved for the paper** (overlap region in simulation); still open for the CBA product |
+| **Idea 01 design** | **done** — `ideas/01-versioned-routing-memory.md` |
+| Build: simulated world + drift intervention | not started — next |
 | CBA disclosure review | not started — long lead time, start early |
 
 ## Open questions for Animesh
