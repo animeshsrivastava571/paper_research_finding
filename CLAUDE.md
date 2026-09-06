@@ -72,7 +72,7 @@ Starting point, not a blank page: BoundaryRouter's ground-truth rule already res
 
 - **None of the five key papers is peer reviewed.** FlyRoute, BoundaryRouter, SkillRouter, R3-Skill, GLOVE — all arXiv preprints, no venue, no journal ref. The publication route is open, and their numbers deserve less weight than reviewed work. They are still prior art for novelty.
 - **FlyRoute's four agents are Huawei's own** (Huawei Cloud, Ascend, Kunpeng, HarmonyOS) — cleanly separated product lines, so contested cases are rare *by construction*. They owned every agent and still didn't run a capability-shift test. Its headline +17pp rests mostly on one domain (Server Hardware 37→81) whose description was hopeless.
-- **GLOVE is the second premise risk**, not background reading. It does conflict detection between stored memory and fresh observation under controlled drift. Different setting (web nav / planning / control, not routing) and it *realigns* rather than versions — but it's the closest thing to the versioning leg. **Not yet read end to end.**
+- **GLOVE (2601.19249) — read in full.** Closest work to the versioning argument, and it takes real ground: its motivation *is* ours, published Jan 2026 — *"the agent cannot identify which specific steps became invalid."* **What preserves our contribution is its Algorithm 1, Phase III: `D ← D \ N` — it DELETES obsolete records.** So after GLOVE runs you cannot ask what memory used to say, when it changed, whether it changed back, or reconstruct why a past decision was reasonable. No audit trail — which is disqualifying in a bank. It also detects by **active probing** (α re-executions per suspected entry: costly, statistical, needs a re-executable environment), addresses **environment** drift not **agent capability** drift, and isn't routing. **Copy their drift methodology** — controlled interventions applied uniformly across all methods, benchmarks released at github.com/NICE-HKU/GLOVE.
 - **R3-Skill is mislabelled in the roadmap.** Its "rejections" are synthesis-time judgements that skills don't combine — not routing declines. The abstention angle is still open.
 - **BoundaryRouter routes LLM-vs-agent** (escalation), not among an estate. Cite for mechanism, not as competitor. **FlyRoute is the competitor.**
 
@@ -100,7 +100,7 @@ Still open after reading it: **drift under capability shift** (their OOD is new 
 
 **GraphPlanner (2604.23626) is not a competitor** — its "agents" are workflow roles (Planner/Executor/Summarizer), not overlapping specialists. But it settles the versioning claim: GARNet connects history *"through shared neighbors rather than explicit temporal edges"*, so it has no dates and no way to invalidate a range.
 
-**The versioning claim is now three for three.** FlyRoute distils into a description, ACRouter appends to a kNN store, GraphPlanner blends into GNN embeddings — three unrelated architectures, none able to express "this is out of date from here." Much stronger than "FlyRoute distils."
+**The versioning claim is now four for four.** FlyRoute distils into a description, ACRouter appends to a kNN store, GraphPlanner blends into GNN embeddings, GLOVE deletes outright (`D ← D \ N`). Four unrelated architectures, none able to express "this is out of date from here" while keeping the record. GLOVE is the sharpest contrast: it identified the same problem and answered it by destroying the evidence.
 
 **Name this distinction early, in the write-up and in any pitch:**
 - **Cold start** — a new agent, no history. *Solved* (FlyRoute seeds, GraphPlanner zero-shot to unseen LLMs).
@@ -154,7 +154,7 @@ papers/raw/  source HTML as downloaded
 | BoundaryRouter summary | **done** — `summaries/boundaryrouter.md` |
 | SkillRouter / R3-Skill summaries | not started (low priority — background only) |
 | Landscape survey | **done** — `notes/02-landscape-survey.md` |
-| GLOVE end-to-end read | not started — premise risk |
+| GLOVE end-to-end read | **done** — see summaries/glove.md |
 | Agent-as-a-Router read | **done** — closest competitor; see notes/02 |
 | GraphPlanner read | **done** — not a competitor; see summaries/graphplanner.md |
 | Close-call ground truth | **not started — blocks everything downstream** |

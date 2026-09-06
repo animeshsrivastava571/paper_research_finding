@@ -170,3 +170,43 @@ Papers conflate these routinely, and reviewers will too. Define them apart early
 Our contribution is entirely in the second, and the confusion is a live risk to how the work is read.
 
 Also note the direction of their future work — *"richer agent profiles"*. The field is drifting back toward profiles, not decisions.
+
+---
+
+## GLOVE — read in full, 6 Sep 2026
+
+[2601.19249](https://arxiv.org/abs/2601.19249), Jan 2026, HKU. Preprint. Full summary: `summaries/glove.md`.
+
+**The closest work to the versioning argument, and it takes real ground.** Its motivation is ours, published in January: *"the agent cannot identify which specific steps became invalid, leading it to retrieve and reuse intermediate actions indiscriminately."* That is the localisation argument that rescued this project, already in print.
+
+**What preserves the contribution — Algorithm 1, Phase III:**
+
+```
+D ← D \ N        # remove obsolete counterparts   ← set difference. Deletion.
+D ← D ∪ {Q̂}     # insert verified summary
+```
+
+GLOVE **deletes**. "Deprecating obsolete records" means removing them. Afterwards you cannot ask what memory used to say, when it changed, whether it has changed back, or reconstruct why a past decision was reasonable at the time. **No audit trail** — disqualifying in a regulated setting, and worth making that argument explicitly since it is a CBA-specific strength rather than a generic one.
+
+### The pattern is now four for four
+
+| System | Maintenance operation | Old record survives? |
+|---|---|---|
+| FlyRoute | distil into a description | no — compressed away |
+| Agent-as-a-Router | append to kNN store | n/a — nothing retired |
+| GraphPlanner | blend into GNN embeddings | no — averaged, no temporal edges |
+| **GLOVE** | **`D ← D \ N`** | **no — explicitly deleted** |
+
+GLOVE is the sharpest contrast of the four: it identified the same problem and answered it by destroying the evidence.
+
+### Three further separations
+
+1. **Detection is by active probing** — α re-executions per suspected entry. Costly, statistical, only fires on a *noticed* conflict, and needs a cheaply re-executable environment. A deploy event identifies every affected record instantly for zero probes. **That gap is the experiment.**
+2. **Environment drift, not agent drift.** Theirs: the world changes under a fixed agent (interfaces update, obstacles move). Ours: the agent changes under a fixed world. There is no deploy-event analogue in their setting, which is precisely why they must probe.
+3. **Not routing.** Web navigation, discrete planning, continuous control.
+
+### Copy their methodology
+
+> *"We introduce a set of controlled environmental drifts applied to standard benchmarks as difficulty-enhanced evaluation settings... applied uniformly across all methods without algorithm-specific tuning."*
+
+That is the right shape for our drift benchmark. Benchmarks released at https://github.com/NICE-HKU/GLOVE — read the repo for how the interventions are specified before designing ours.
