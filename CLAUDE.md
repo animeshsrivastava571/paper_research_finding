@@ -168,7 +168,19 @@ Two decisions recorded there that shape everything:
 | Close-call ground truth | **dissolved for the paper** (overlap region in simulation); still open for the CBA product |
 | **Idea 01 design** | **done** — `ideas/01-versioned-routing-memory.md` |
 | Build: simulated world + drift intervention | not started — next |
-| CBA disclosure review | not started — long lead time, start early |
+| **BAICONF 2026 abstract** | **drafted** — `submissions/baiconf2026-abstract.md`. **Deadline 19 Sep 2026** (conference 17–19 Dec) |
+| Verify BAICONF "invited for publication" wording | **not done — email dcal@iimb.ac.in.** Affects whether FinNLP/ICAIF stays open |
+| CBA disclosure review | not started — long lead time, start early; **now also gates the BAICONF abstract** |
+
+## Venues
+
+`notes/03-venues.md`. **BAICONF 2026 (IIM Bangalore, 17–19 Dec, abstract due 19 Sep)** was suggested by Animesh's boss. It is a **presentation venue, not a publication venue** — ~1,000-word abstract, historic wording only *"select papers may be invited for publication"*, proceedings handed to delegates, no ISBN/DOI/indexing found, ~44% acceptance. Matches the roadmap's "presentation is not publication" warning exactly, so it does **not** replace FinNLP/ICAIF.
+
+Worth submitting anyway: near-zero cost, submittable on the idea alone, the only venue reachable in 2026, and it buys boss buy-in for time and the disclosure review.
+
+**Two things gate submission:** (1) email dcal@iimb.ac.in to establish what "invited for publication" means — ISBN'd proceedings would make a later FinNLP/ICAIF submission a double-submission problem; (2) CBA disclosure clearance — the draft is deliberately generic (financial services as context, no internal system names or data), but confirm.
+
+**If accepted, a full paper is due ~late October** — six weeks after acceptance in prior editions. That converts "build the simulation eventually" into a dated commitment. The mandatory dataset requirement is satisfied by the simulated benchmark, where CBA data would not be.
 
 ## Open questions for Animesh
 
