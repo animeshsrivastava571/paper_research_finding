@@ -2,50 +2,19 @@
 
 ## BAICONF 2026 — IIM Bangalore (DCAL)
 
-**International Conference on Business Analytics and Intelligence**, ~11th edition.
+**Moved.** Full venue detail and constraints now live in [`dcal_conference/README.md`](../dcal_conference/README.md), alongside the candidate ideas for it.
 
-| | |
-|---|---|
-| Conference | **17–19 December 2026**, IIM Bangalore |
-| **Abstract deadline** | **19 September 2026** |
-| Submission | via the site after register/login — `https://dcal.iimb.ac.in/baiconf2026/` (behind a bot-challenge; open in a browser) |
-| Contact | dcal@iimb.ac.in, +91 80 26993822 |
-| Format | ~1,000-word abstract first, then full paper up to 4,500 words / 12 pages |
-| Full paper (prior editions) | ~6 weeks after abstract acceptance — 2017: abstracts 9 Sep, full papers 28 Oct |
-| Scale (2022) | ~450 abstracts → 200 selected (~44%) |
-| Fees (2017) | INR 2,500 student / 4,000 academic / 5,000 corporate |
-| **Dataset** | **mandatory for all submissions** (2017 rules), preferably Excel |
+### ⚠️ Correction to an earlier version of this note
 
-### Publication status: presentation venue, not a publication venue
+This note previously recorded BAICONF as *"a presentation venue, not a publication venue"* with *"no evidence of ISBN, DOI or indexing."* **That was wrong**, and it was based on reading old editions' pages plus search summaries rather than the 2026 CFP (the site is behind a bot-challenge that blocks automated fetching).
 
-- Historic wording is *"Select papers may be invited for publication"* — discretionary and vague
-- Proceedings historically distributed to delegates in the conference kit (a CD in earlier years)
-- No evidence of ISBN, DOI or indexing found
-- ~44% abstract acceptance — not a selective research venue
+The 2026 CFP states that selected work routes to **IIMB Management Review** — ISSN 0970-3896, Elsevier, **Scopus-indexed, ABDC B**. That is a genuinely citable outlet.
 
-Matches the roadmap's warning exactly: *"Presentation is not publication... Both are worth having; only the second counts toward a publication goal."*
+**The strategic consequence is the opposite of what was recorded.** BAICONF **competes with** FinNLP/ICAIF rather than complementing them: the same work cannot be published twice. Presenting is not the same as publishing in IMR — only selected work is invited, and an invitation can be declined — so the decision only arises if one comes.
 
-**So it does not replace FinNLP / ICAIF.** Suggested by Animesh's boss; worth doing on its own merits.
+Two other corrections: the abstract limit is **500 words**, not ~1,000; and fees are higher than the 2017 figures previously recorded (corporate ₹10,000 / academic ₹7,000 / student ₹5,000 incl. GST).
 
-### Why submit anyway
-
-1. **Near-zero cost** — a 1,000-word abstract, submittable on the *idea*. The only venue reachable in 2026.
-2. **Probably doesn't burn novelty** — nothing citable is published, so FinNLP/ICAIF stays open. ⚠️ **verify**.
-3. **Forces articulation** — practitioner feedback before building.
-4. **Boss buy-in** — buys time allocation and help with the disclosure review, the roadmap's stated schedule risk.
-
-### Two things to verify before submitting
-
-1. **Ask dcal@iimb.ac.in what "invited for publication" means.** If selected papers land in ISBN'd proceedings or a journal, submitting the same work to FinNLP/ICAIF later becomes a double-submission problem. One-line email; protects the main target.
-2. **CBA disclosure.** The abstract must not disclose internal agent-estate details ahead of clearance. Draft is deliberately generic — financial services as motivating context, no CBA system specifics, no internal data. Confirm before submitting.
-
-### Commitment if accepted
-
-A full paper is due roughly six weeks after acceptance — **late October / early November**. That means the simulation must be built and the core drift result in hand by then. Feasible (the harness is a weekend or two) but it converts "build eventually" into a dated commitment. Submit the abstract only if that's acceptable.
-
-**The dataset requirement is satisfied by the simulated benchmark** — shareable and reproducible, where CBA data would not be. Another argument for simulation-first.
-
----
+**Lesson worth keeping:** venue facts taken from prior editions and search snippets were wrong on the single most important point. Read the current CFP, in a browser, before drawing conclusions about a venue.
 
 ## Primary targets (citable, reviewed, with proceedings)
 

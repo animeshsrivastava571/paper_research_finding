@@ -17,7 +17,8 @@ Working repo for the research track of the Foundation Model Systems roadmap (v4)
 | Ground-truth for contested cases | **dissolved for the paper** — defined by construction in simulation (the overlap region). Still open for the CBA product. |
 | **Idea 01 — versioned routing memory** | **designed** — [`ideas/01-versioned-routing-memory.md`](ideas/01-versioned-routing-memory.md) |
 | Build: simulated world + drift intervention | not started — next |
-| **BAICONF 2026 abstract** | **drafted** — [`submissions/baiconf2026-abstract.md`](submissions/baiconf2026-abstract.md) · **due 19 Sep 2026** |
+| **BAICONF 2026 — idea 01 locked** | [`dcal_conference/01-memory-qualifier-loss.md`](dcal_conference/01-memory-qualifier-loss.md) · more candidates to come |
+| BAICONF abstract (500 words) | **not written — due 19 Sep 2026** |
 | CBA disclosure review | not started — long lead, start early |
 
 Full working context in [`CLAUDE.md`](CLAUDE.md).
@@ -43,6 +44,7 @@ The proposal is in [`ideas/01-versioned-routing-memory.md`](ideas/01-versioned-r
 
 ```
 ideas/       proposed work, numbered — start here
+dcal_conference/  BAICONF 2026 candidates + venue constraints
 notes/       working notes, numbered in reading order
 summaries/   per-paper walkthroughs, each with a relevance verdict
 submissions/ conference submissions in progress

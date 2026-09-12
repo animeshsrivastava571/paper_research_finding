@@ -174,9 +174,11 @@ Two decisions recorded there that shape everything:
 
 ## Venues
 
-`notes/03-venues.md`. **BAICONF 2026 (IIM Bangalore, 17–19 Dec, abstract due 19 Sep)** was suggested by Animesh's boss. It is a **presentation venue, not a publication venue** — ~1,000-word abstract, historic wording only *"select papers may be invited for publication"*, proceedings handed to delegates, no ISBN/DOI/indexing found, ~44% acceptance. Matches the roadmap's "presentation is not publication" warning exactly, so it does **not** replace FinNLP/ICAIF.
+`notes/03-venues.md` for targets; **`dcal_conference/` for BAICONF candidates and constraints** (idea 01 locked 12 Sep).
 
-Worth submitting anyway: near-zero cost, submittable on the idea alone, the only venue reachable in 2026, and it buys boss buy-in for time and the disclosure review.
+⚠️ **Correction:** **BAICONF 2026 (IIM Bangalore, 17–19 Dec, abstract due 19 Sep)** was suggested by Animesh's boss. selected work routes to **IIMB Management Review** (ISSN 0970-3896, Elsevier, **Scopus-indexed, ABDC B**) — so it **competes with** FinNLP/ICAIF rather than complementing them. An earlier version of these notes recorded it as presentation-only with no indexing; that was wrong, and based on old editions plus search snippets rather than the 2026 CFP. Abstract limit is **500 words**, not 1,000.
+
+Presenting ≠ publishing in IMR: only selected work is invited and an invitation can be declined, so the conflict only arises if one comes.
 
 **Two things gate submission:** (1) email dcal@iimb.ac.in to establish what "invited for publication" means — ISBN'd proceedings would make a later FinNLP/ICAIF submission a double-submission problem; (2) CBA disclosure clearance — the draft is deliberately generic (financial services as context, no internal system names or data), but confirm.
 

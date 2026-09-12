@@ -1,0 +1,181 @@
+# Idea 01 — Memory-induced failure modes in financial document agents
+
+**Status:** locked as a BAICONF candidate, 12 Sep 2026. Nothing built yet.
+**Working title:** *Memory-induced failure modes in financial document agents: measuring staleness, error propagation and context dilution across short- and long-term memory*
+**Venue constraints:** see [README](README.md)
+
+> **Honest calibration.** ~70% a solid BAICONF paper. ~15% a FinNLP paper — **do not send it there.** This is a measurement paper, positioned honestly against adjacent published work. It does not claim a novel mechanism, and it should not pretend to.
+
+---
+
+## 1. The problem, plainly
+
+An analyst asks an AI assistant about JPMorgan's 2007 annual report. It answers and stores notes.
+
+Later, they ask about JPMorgan's **2018** report. The stored note reads *"JPMorgan revenue $X"* — **with no year attached**, because the summarisation step dropped it. The assistant answers the 2018 question with the 2007 figure.
+
+**The note was never wrong. It stopped being the answer to the question being asked.**
+
+The general principle, and the reason this is a *finance* paper rather than a generic memory paper:
+
+> **A financial figure is meaningless without its qualifiers, and summarising strips qualifiers.**
+
+*"Revenue was 233"* is not a fact until you know the **period**, **entity**, **scale** ($233m vs $233bn — wrong by 1000×), **currency**, **basis** (reported vs adjusted, GAAP vs IFRS), and **consolidation level**. Accounting standards *are* rules about which qualifiers a number must carry. Finance has an unusually dense set of them; a summariser trained to be concise strips exactly these, because they read like clutter.
+
+## 2. The four failure modes
+
+**Short-term memory — within one conversation**
+
+1. **Context dilution** — as the conversation lengthens, relevant facts get crowded out; accuracy falls with turn depth.
+2. **Error propagation** — a wrong figure at turn *n* is carried forward and reused at turns *n+1…*, compounding.
+
+**Long-term memory — across sessions**
+
+3. **Staleness** — a figure stored from FY(*t*) answers an FY(*t+k*) question.
+4. **Cross-session bleed** — one company's figures appear in another's answers.
+
+Why each bites in finance: conversations are long and numeric and the latest figure usually supersedes; ConvFinQA turns explicitly chain on earlier answers, so a bad number corrupts downstream arithmetic measurably; financial facts are period-bound by construction; and cross-session bleed in a bank is a potential **information-barrier breach** — a control failure, not noise. That last point is the one no other memory paper is positioned to make.
+
+## 3. Measurable qualifiers
+
+| Qualifier | Measurable on this data? |
+|---|---|
+| **Period** | ✅ year in the FinQA id, and in most question text |
+| **Entity** | ✅ ticker in the id |
+| **Scale / unit** | ✅ table headers carry *"(in millions)"* |
+| Basis | ⚠️ partial — row labels say "adjusted", "continuing operations"; treat qualitatively |
+| Currency | ❌ weak — S&P 500 filings are almost all USD |
+| Restatement | ❌ too hard for six weeks |
+
+Three properly, one qualitatively. **The scale result may be the best one** — a dropped unit is a 1000× error, far more alarming to a practitioner than a stale year.
+
+## 4. Five conditions
+
+Vary only documented LangMem parameters, bracketed by two plain references. Every finding then maps to a setting a practitioner can change the same day.
+
+| # | Condition | What it is |
+|---|---|---|
+| **F** | Floor — no memory | each turn answered independently |
+| **3a** | **LangMem off the shelf** | defaults: `schemas=None`, bare summary prompts, `namespace=("memories","{langgraph_user_id}")` |
+| **3b** | LangMem + period-aware prompts | custom summary prompts requiring figures retain their qualifiers |
+| **3c** | LangMem + structured and scoped | Pydantic `schemas` with `fiscal_period`; entity in the `namespace` |
+| **C** | Ceiling — full history, no summarisation | nothing dropped or compressed |
+
+**F** says what memory was worth at all; **C** says how much was recoverable. Without **C**, "3c is better" is weak — with it, you can say *"recovers x% of what full history retains."*
+
+Agent loop on **LangGraph** (checkpointer + store) for orchestration only; the memory policy is what varies.
+
+### How each mode is measured
+
+| Mode | Measurement |
+|---|---|
+| Dilution | turn-level execution accuracy vs turn depth |
+| Error propagation | wrong answer at turn *n*; accuracy of dependent vs independent later turns |
+| Staleness | cross-period pairs — **stale-answer rate** = share of FY(*t+k*) questions answered with the FY(*t*) value |
+| Cross-session bleed | session 1 on company X, session 2 on Y; share of Y answers containing X's figures |
+
+Report the **residual against C**, not only the delta from 3a.
+
+## 5. The fix — three settings, no fork
+
+LangMem source read from `main`, 12 Sep 2026 (MIT, 1,660 stars, pushed 2026-09-09). **Everything we vary is an injectable parameter.**
+
+**The default summary prompt, verbatim:**
+
+```
+"Create a summary of the conversation above:"
+```
+
+That's the whole instruction. No mention of numbers, units, dates or periods. **That is the mechanism for qualifier loss, locatable in two lines of source.** And `RunningSummary.summary` is a flat `str` — nowhere to carry a period except inside prose, where the next round can drop it.
+
+| Rule | LangMem lever | Condition |
+|---|---|---|
+| Period tagging | `schemas=[Fact(metric, value, scale, entity, fiscal_period, source_doc)]` | 3c |
+| As-of filtering | `store.search(..., filter={"fiscal_period": ...})` | 3c |
+| Recency dominance | post-retrieval ordering | 3c |
+| Entity scoping | `namespace=("memories","{user}", company_id)` | 3c |
+| Numeric pinning | `initial_summary_prompt` / `existing_summary_prompt` | 3b |
+
+**`namespace` defaults to `("memories", "{langgraph_user_id}")` — scoped by *user*, not by the entity discussed.** So cross-session bleed is the documented default behaviour. Fixed by putting the company in the namespace.
+
+⚠️ **Pin the LangMem version in the paper.** The API has moved before.
+
+## 6. Data — verified, not assumed
+
+- **ConvFinQA** — `github.com/czyssrs/ConvFinQA`, EMNLP 2022. 3,037 / 421 / 434 conversations; conversation- and turn-level. Ships a 17.5 MB `data.zip`.
+- **FinQA** — `github.com/czyssrs/FinQA`, **CC-BY-4.0**, S&P 500 earnings reports **1999–2019**. Plain JSON (train 78 MB).
+
+**Checks run 12 Sep 2026:**
+
+**No structured fiscal-period field.** But FinQA ids follow the FinTabNet convention, verified on real records:
+
+```
+ILMN/2007/page_78.pdf-2      JPM/2007/page_157.pdf-1
+BLK/2012/page_160.pdf-1      JPM/2018/page_110.pdf-5
+```
+
+`TICKER/YEAR/page_N.pdf-index` → **company and report year come free.** (JPM at both 2007 and 2018 in an 8-record sample confirms multi-year coverage.) And ~6 of 8 sampled questions name their target year in the text.
+
+**Design rules that follow:**
+- Filter to questions naming one explicit year; parse by regex; report how much of the set survives.
+- **Pair years ≥5 apart.** Annual reports carry 2–3 years of comparatives, so adjacent years overlap and the "stale" figure would be legitimately present. Without this the measurement is vacuous.
+- Cross-entity pairs: different tickers.
+
+**LangGraph `store.search` supports metadata filtering** — `filter: dict[str, Any]` confirmed in source. The as-of rule needs no workaround.
+
+**Released dataset:** derived cross-period and cross-entity pairs, CSV **and Excel** — satisfies the mandatory-dataset requirement where CBA data could not.
+
+## 7. Positioning — the nearest neighbours
+
+**[2604.17979](https://arxiv.org/abs/2604.17979) — "Architecture Matters More Than Scale", AIITA 2026, IEEE. Published, not a preprint.** Uses FinQA and ConvFinQA; compares baseline / RAG / structured LTM / memory-augmented conversational with Mem0 on an 8B local model. Contains typed *entity-period-metric* tuples, scale normalisation, per-dialog scoping against cross-dialog leakage, and an accuracy-by-turn-depth figure.
+
+**Strong related work, not a kill.** Its stated question is *"given a fixed 8B locally-hosted model, which architecture delivers the strongest accuracy?"*, and it *"makes no state-of-the-art claim."* An architecture bake-off under SME compute constraints — failure modes appear as passing observations, not the object of study.
+
+| | Paper 1 | This paper |
+|---|---|---|
+| Question | which architecture wins under compute limits? | what breaks, and which setting fixes it? |
+| Reports | aggregate accuracy | **per-failure-mode rates** |
+| Library | Mem0, 8B local | **LangMem** — "what do the shipped defaults do" is library-specific |
+| Cross-fiscal-year staleness | no | **yes**, ≥5-year gaps |
+
+**[2606.29251](https://arxiv.org/html/2606.29251) — "When Summaries Distort Decisions".** The **motivation citation.** Shows financial compression changes the *investment decision*, and names **decontextualization** — evidence retained but separated from the qualifiers needed to interpret it. Open with it: someone has shown these errors change decisions; we show where they come from and how to stop them.
+
+## 8. Already taken — do not re-claim
+
+| Claim | Taken by |
+|---|---|
+| Taxonomy of memory failure modes | SHIELDA (2508.07935) names Outdated / Poisoned / Misaligned Memory; *Anatomy of Agentic Memory* (2602.19320); *SoK: Agentic RAG* (2603.07379) already uses the STM/LTM split |
+| Type-aware compression (verbatim numbers, summarised prose) | Adaptive Focus Memory (2511.12712) — FULL / COMPRESSED / PLACEHOLDER; the phrase *"type-aware retention"* is in use |
+| Schema-validated memory writes with validation gates | xmemory (2604.27906); Memanto (2604.22085) |
+| Fact-recovery measurement under compression | AFM — *"60% of facts become irrecoverable"* at 36.7× |
+| Qualifier-preserving compression prompts | 2606.29251 — and it uses a better metric (decision flips) |
+| Ground-truth-preserving memory for auditability | MemMachine (2604.04853) |
+
+**Terminology:** avoid "poisoning" — in the literature it means adversarial injection. Use **error propagation** for non-adversarial compounding, or a reviewer asks for a threat model.
+
+## 9. ⚠️ The real risk is effect size, not novelty
+
+The paper assumes LangMem's defaults measurably damage financial figures. **If summarisation mostly keeps years and units, or ConvFinQA conversations are too short for dilution to bite, there is no paper.** Nobody has checked. Including us.
+
+**Go/no-go check, 1–2 days:** ~50 cross-year pairs, default config, count answers carrying the wrong year.
+
+- ~30% stale → paper
+- ~3% → stop; six weeks saved
+
+Run it **before** committing to the full paper — but not before the abstract, which is design-stage and due in 7 days regardless.
+
+## 10. Framing requirement
+
+**Lead with decision risk, not mechanism.** Not *"memory loses qualifiers"* but:
+
+> A financial analyst's AI assistant reports last year's figure for this year's question, or drops "millions" from a number, and the analyst acts on it. We measure how often the memory layer in widely used agent frameworks produces materially wrong figures from correct source documents — and identify the configuration settings that prevent it.
+
+Same paper; now a business-analytics problem rather than plumbing.
+
+## 11. Open items
+
+- [ ] **Email baiconf2026@iimb.ac.in** — what does the IMR route commit to? Gates everything (see README).
+- [ ] Confirm exact theme wording from the submission form.
+- [ ] Write the 500-word abstract (due 19 Sep).
+- [ ] Run the §9 go/no-go check.
+- [ ] Correctness gate: reproduce ConvFinQA's published baselines (~68.9% fine-tuned, ~52.4% multi-aspect, 89.4% human) before measuring anything new.
