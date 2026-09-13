@@ -162,6 +162,41 @@ That's the whole instruction. No mention of numbers, units, dates or periods. **
 
 **Measurement advantage:** ConvFinQA ships `exe_ans`, the executed answer — so correctness is checkable **numerically**, not by an LLM judge. Fewer arguments with reviewers.
 
+## 5c. Model choice — a confound that must be controlled *(added 13 Sep)*
+
+**Summarisation is lossy by definition.** Mapping many tokens to few means information must go; there is no lossless option. The question is *which* information is prioritised for survival — and that is set by the prompt, which says only *"Create a summary of the conversation above:"*. Nothing about numbers, units or dates.
+
+**So the model is not failing. It is succeeding at the wrong objective.** A good prose summary reads better without "(FY2015, $millions)" cluttering it. This is an **objective-specification problem, not a capability ceiling** — which is precisely why the prompt fix (3b) is the right intervention.
+
+**Loss may therefore not be monotonic in model quality.** Two plausible outcomes:
+- *Better model → less loss*: it infers unprompted that financial figures need their periods.
+- *Better model → more loss*: it writes better prose, and better prose drops parenthetical decoration.
+
+**Either result is publishable, and one is much stronger:**
+
+| Result | Meaning |
+|---|---|
+| Loss shrinks with model size | *"You can buy your way out — here is the cost curve"* |
+| **Loss persists at the frontier** | ***"You cannot buy your way out. You must change the configuration"*** |
+
+Working expectation: loss **persists**, because capability does not fix an underspecified objective. To be measured, not asserted.
+
+### Three design consequences
+
+1. **Hold the model constant within a condition.** If 3a runs on a small model and 3b on a large one, the comparison is meaningless. Same model across all five conditions, stated explicitly in the paper.
+2. **Separate the two models in play.** The **summariser** does the compression; the **answerer** uses the memory. Hold the answerer fixed and vary only the summariser — otherwise a better answer cannot be attributed to better memory rather than a better reader.
+3. **Model size is a second axis, not a nuisance parameter** — if time allows.
+
+### What to use
+
+- **Primary: a mid-size open model** — reproducible, cheap, pinnable. Carries the full grid.
+- **Secondary: one frontier API model** on a subset — enough to answer "does capability close the gap?"
+- **Pin every version.** API models change silently behind the same name, which would make the numbers unreproducible — and is, neatly, the exact drift problem `ideas/01` is about.
+
+**Cost bounding:** 5 conditions × 4 modes × N sessions × 2 models adds up. Open model runs the full grid; frontier model runs one slice.
+
+**Not in the abstract, deliberately.** It is a control, not a result, and the abstract is at 498/500 words. It would only belong there if varying model size became a headline finding — which requires committing to run it.
+
 ## 6. Data — verified, not assumed
 
 - **ConvFinQA** — `github.com/czyssrs/ConvFinQA`, EMNLP 2022. 3,037 / 421 / 434 conversations; conversation- and turn-level. Ships a 17.5 MB `data.zip`.
