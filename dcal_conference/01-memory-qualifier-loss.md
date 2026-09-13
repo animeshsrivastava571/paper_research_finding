@@ -1,7 +1,7 @@
 # Idea 01 — Memory-induced failure modes in financial document agents
 
 **Status:** locked as a BAICONF candidate, 12 Sep 2026. Nothing built yet.
-**Working title:** *Memory-induced failure modes in financial document agents: measuring staleness, error propagation and context dilution across short- and long-term memory*
+**Working title:** *Lost in Handoff: Memory-Induced Errors in Multi-Agent Financial Document Systems*
 **Venue constraints:** see [README](README.md)
 
 > **Honest calibration.** ~70% a solid BAICONF paper. ~15% a FinNLP paper — **do not send it there.** This is a measurement paper, positioned honestly against adjacent published work. It does not claim a novel mechanism, and it should not pretend to.
@@ -239,6 +239,40 @@ Embedding similarity measures **topical** closeness; financial errors are **prec
 Report cosine similarity **alongside** qualifier retention and show the divergence: similarity holding near ~0.95 while retention collapses to ~40%.
 
 **That is a strong figure and a genuine warning:** the way practitioners currently sanity-check summaries — embedding similarity, or an LLM judge saying "looks good" — **would miss every one of these errors.** It converts a methodological aside into a finding practitioners can act on.
+
+## 5e. Multi-agent scope — REQUIRED, added 13 Sep ⚠️
+
+**This is a design change, not a framing change. It must be built.** The abstract now claims a multi-agent system; a single-agent implementation would make the title and Methods section false.
+
+### What changes
+
+Run the pipeline as **two agents sharing memory**, not one:
+
+```
+retrieval agent  ──handoff──▶  analysis agent
+   (gathers figures)              (consumes them, answers)
+        │                              │
+        └────── shared memory ─────────┘
+```
+
+**Three consequences:**
+
+1. **A new compression point.** The handoff is another place qualifiers are dropped — the retrieval agent summarises for the analysis agent, independently of LangMem's own summarisation. Loss now compounds across *rounds* **and** *handoffs*.
+2. **A new blast radius.** With shared memory, one agent's qualifier loss corrupts *another agent's* output. The error crosses an ownership boundary — which in a bank is a different class of problem from a single agent being wrong.
+3. **A fifth failure mode: handoff loss.** The other four (dilution, error propagation, staleness, cross-entity contamination) are unchanged.
+
+### Build cost
+
+Small — one additional node in the LangGraph graph plus the handoff payload. But it must not be skipped, and it means:
+- Every condition (F, 3a, 3b, 3c, C) runs through **both** agents
+- Qualifier retention is measured at **each** stage: tool output → retrieval agent's restatement → **handoff** → analysis agent's answer → summary → later retrieval
+- The §5d extraction-and-compare check runs at each of those points, which is what localises the loss
+
+### Why it is worth the scope increase
+
+It matches production reality (real financial systems are multi-agent), it broadens the audience at a venue whose workshop programme includes Agentic AI, and it sharpens the compounding argument — each summary re-summarises the previous summary, and each handoff re-compresses again.
+
+**Title history:** *"Broken Telephone"* was considered for exactly this compounding metaphor and **rejected — the idiom does not travel** ("Chinese whispers" in Indian/British English, "telephone" in American). A title that needs explaining is a bad title. *"Lost in Handoff"* is plain, universal, and makes the multi-agent claim concrete rather than decorative.
 
 ## 6. Data — verified, not assumed
 
