@@ -197,6 +197,49 @@ Working expectation: loss **persists**, because capability does not fix an under
 
 **Not in the abstract, deliberately.** It is a control, not a result, and the abstract is at 498/500 words. It would only belong there if varying model size became a headline finding — which requires committing to run it.
 
+## 5d. What counts as a qualifier, and how to measure retention *(added 13 Sep)*
+
+### Broaden the definition rather than adding dimensions
+
+Period, entity and scale are not the whole set. A **qualifier is anything that constrains when or whether the number is true**:
+
+| Type | Example | Note |
+|---|---|---|
+| Period | FY2015 | in the original three |
+| Entity | JPM | in the original three |
+| Scale / unit | $ millions | in the original three |
+| **Basis** | *"excluding the divestiture"*, *"adjusted"*, *"unaudited"*, *"continuing operations"* | **possibly the most dangerous** |
+| **Temporal scope** | *"as at 31 March"* vs *"for the year ended"* | point-in-time vs period |
+| **Hedges** | *"approximately"*, *"preliminary"* | calibration |
+| **Negations** | *"did not include"* | reverses meaning |
+
+**Basis loss is worse than being wrong.** Drop *"excluding the divestiture"* and the figure is **literally correct and completely misleading** — nothing looks off, so nothing gets caught. A wrong number can be spotted; an unqualified correct one cannot.
+
+### Measuring representativeness — extrinsic and intrinsic
+
+- **Extrinsic (primary):** can the agent still answer correctly? Ties loss to consequence. This is the main measure.
+- **Intrinsic (secondary):** does the summary retain the facts? Catches degradation *before* it produces a visible error.
+
+### ⚠️ Do not use semantic similarity as the metric
+
+A natural instinct, and the wrong tool — **it is blind to exactly the errors that matter**:
+
+| Source | Summary | Cosine sim | Real error |
+|---|---|---|---|
+| "$233 **million**" | "$233 **billion**" | ~0.99 | **1000×** |
+| "Revenue in **2015**" | "Revenue in **2018**" | ~0.99 | wrong answer |
+| "grew, **excluding the divestiture**" | "grew" | ~0.95 | materially misleading |
+
+Embedding similarity measures **topical** closeness; financial errors are **precision** errors. One token flips, correctness dies, the vector barely moves. Same failure mode as BLEU/ROUGE on factual QA.
+
+**Use extraction-and-compare instead:** extract `(metric, value, scale, period, entity, basis)` from source and from summary, compare **field by field, exact match**. That yields a **qualifier retention rate** — deterministic, no judge, no embeddings.
+
+### But keep similarity as a negative control — it is a result
+
+Report cosine similarity **alongside** qualifier retention and show the divergence: similarity holding near ~0.95 while retention collapses to ~40%.
+
+**That is a strong figure and a genuine warning:** the way practitioners currently sanity-check summaries — embedding similarity, or an LLM judge saying "looks good" — **would miss every one of these errors.** It converts a methodological aside into a finding practitioners can act on.
+
 ## 6. Data — verified, not assumed
 
 - **ConvFinQA** — `github.com/czyssrs/ConvFinQA`, EMNLP 2022. 3,037 / 421 / 434 conversations; conversation- and turn-level. Ships a 17.5 MB `data.zip`.
