@@ -76,6 +76,50 @@ Agent loop on **LangGraph** (checkpointer + store) for orchestration only; the m
 
 Report the **residual against C**, not only the delta from 3a.
 
+## 4b. Session construction — long chains *(added 13 Sep, fixes a design flaw)*
+
+**LangMem's summarisation is token-triggered.** From the source:
+
+> *"once the cumulative number of message tokens reaches `max_tokens_before_summary`, all messages within it are summarized"*
+
+It does not fire until a threshold is crossed. And **ConvFinQA conversations average ~3.6 turns** (14,115 turns / 3,892 conversations).
+
+**As originally designed, summarisation would probably never have fired and we would have measured nothing.**
+
+**The fix:** chain **4–5 ConvFinQA conversations about the same company into one 15–20 turn session.** Real questions, no synthetic content. For the bleed test, chain conversations about *different* companies — that is precisely the condition that triggers it. Also **sweep `max_tokens_before_summary`** rather than trusting one default.
+
+**This changes the headline from a table to a curve** — qualifier retention against turn depth, with a visible cliff where summarisation fires and further drops at each subsequent round:
+
+```
+qualifier retention
+100% ┤━━━━━━━━━┓
+     │         ┃  ← summarisation fires
+ 60% ┤         ┗━━━━━┓
+     │               ┗━━━━  ← fires again
+ 30% ┤
+     └──┬────┬────┬────┬────
+        5   10   15   20  turns
+```
+
+It answers the question practitioners actually have: **how many turns before my agent starts losing years?**
+
+**Compounding across rounds.** The existing-summary prompt says *"**Extend this summary**"* — each round re-summarises the previous summary. Lossy compression applied repeatedly, so a qualifier surviving round 1 may not survive round 3. At 20 turns there are several rounds, so measure **degradation per round**, not just before/after.
+
+## 4c. Which half of LangMem tests which failure
+
+LangMem has two independent modules doing different jobs:
+
+| Failure | Layer | Module |
+|---|---|---|
+| Dilution | within-session | `short_term/summarization.py` |
+| Error propagation | within-session | `short_term/summarization.py` |
+| Staleness (wrong year) | across sessions | `knowledge/extraction.py` |
+| Cross-company bleed | across sessions | `knowledge/extraction.py` |
+
+Within a session there is a real choice: **pass the full state every turn** (LangGraph's default, via the checkpointer) **or** summarise when long. The first **is our ceiling condition (C)**.
+
+The §4b long-session work targets the *within-session* module. The cross-year work targets the *across-session* module. Two experiments, two modules, four failure modes.
+
 ## 5. The fix — three settings, no fork
 
 LangMem source read from `main`, 12 Sep 2026 (MIT, 1,660 stars, pushed 2026-09-09). **Everything we vary is an injectable parameter.**
@@ -99,6 +143,24 @@ That's the whole instruction. No mention of numbers, units, dates or periods. **
 **`namespace` defaults to `("memories", "{langgraph_user_id}")` — scoped by *user*, not by the entity discussed.** So cross-session bleed is the documented default behaviour. Fixed by putting the company in the namespace.
 
 ⚠️ **Pin the LangMem version in the paper.** The API has moved before.
+
+## 5b. Six nuances, in priority order *(added 13 Sep)*
+
+1. **Where does the qualifier die?** Four candidate points: `tool output → agent's restatement → summary → later retrieval`. The tool output carries table headers ("in millions", year columns); the agent's *restatement* may drop them before summarisation touches anything. **Localising the loss is worth more than measuring it** — if half occurs at restatement, the summary prompt is the wrong fix.
+
+2. **Which qualifier dies first?** They are not equally fragile — year is salient, **units read as clutter**. Rank by survival rate. *"Units are lost 3× more often than years"* is concrete and quotable, and units are the more dangerous loss (a 1000× error).
+
+3. **Position effects.** The source processes messages *"from oldest to newest"*, so **early facts are summarised more times**. Predict: a figure from turn 2 is far more degraded by turn 20 than one from turn 14. Pairs directly with §4b.
+
+4. **Silent vs visible failure.** *"Revenue was 233"* is **visible** ambiguity a human may catch. *"Revenue in 2018 was $233bn"* when that is the 2015 figure is **silent corruption**. Report separately — the second is what matters in finance.
+
+5. **Computation questions should fail harder.** FinQA items like *"percentage growth from 2016 to 2017"* need **two** correctly-labelled years; lookups need one. **That difficulty axis is already in the data**, free.
+
+6. **Similar companies should bleed more.** Two banks share metric names and magnitudes; a bank and a retailer do not. Pair same-sector vs cross-sector — it tells practitioners exactly when the default namespace is dangerous.
+
+**Cheap extras if time allows:** sweep `max_summary_tokens` (default 256) to find the compression cliff; compare two model sizes, since a smaller model losing more qualifiers is a cost-quality finding this audience values.
+
+**Measurement advantage:** ConvFinQA ships `exe_ans`, the executed answer — so correctness is checkable **numerically**, not by an LLM judge. Fewer arguments with reviewers.
 
 ## 6. Data — verified, not assumed
 
