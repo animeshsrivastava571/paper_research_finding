@@ -411,6 +411,24 @@ In **XBRL**, a fact is never a bare number. It is `value + context`, and context
 
 **Honest positioning: an adaptation, not an invention.** The contribution is that **the domain has a solved representation for exactly this problem and agent memory discards it.**
 
+### ⚠️ Do not lock the claim to XBRL
+
+**The claim is structural typing — qualifiers as schema fields rather than prose. XBRL is the precedent that justifies it, not the deliverable.**
+
+The abstract therefore says *"typed facts carrying mandatory entity, period and unit context"* and cites XBRL as the standard that already mandates such a representation. If implementation shows XBRL's model is awkward for conversational memory, or something fits better, **the claim survives and only the instantiation changes.**
+
+Alternatives to weigh during implementation:
+
+| Representation | Fit |
+|---|---|
+| **XBRL / iXBRL** | Finance-native, mandatory, richest context model. Current default choice |
+| **Bitemporal records** (valid time / transaction time) | **Complementary, not competing** — XBRL says what a fact *is*; bitemporal says when a record was *valid*. MemStrata (2606.26511) uses this. Could combine |
+| **RDF / OWL with temporal qualification** | More general, heavier, no finance semantics |
+| **SDMX / Data Cube** | Statistical dimensions; good for time series, weaker for narrative facts |
+| **Plain typed records** | Simplest; loses the principled answer to *which* qualifiers are mandatory |
+
+**The property to preserve whichever is chosen:** a *metric-conditional* required-field set — revenue needs period, entity and unit; a ratio needs no unit; a rate needs an instant rather than a duration. That is what distinguishes this from "add some fields", and it is the reason XBRL is the current pick.
+
 ### Novelty check, 13 Sep
 
 XBRL + LLM work exists but is all about **reading** XBRL, not using its model as memory:

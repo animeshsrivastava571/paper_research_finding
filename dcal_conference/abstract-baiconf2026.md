@@ -29,7 +29,7 @@
 
 **Need.** Drop "millions" from a figure and the answer is wrong by a thousandfold while looking entirely normal. "Revenue was 233" is not a fact until one knows whose, when, and in what unit. A running summary is one prose string under a fixed budget, re-compressed each round from the previous summary: there is nowhere for a qualifier to live, and instruction cannot create a slot that does not exist. The failure is silent: an unqualified figure can be literally correct and still mislead, so nothing looks wrong and nothing gets checked. The same loss yields prior-year figures for current-year questions, and one firm's figures in another's. Recent work shows compression can change the investment judgment a source supports; where these errors arise is unknown.
 
-**Aims.** The study has two parts. First, we quantify five failure modes — dilution, error propagation, staleness, cross-entity contamination, and loss at handoff — and localise where qualifiers are lost. Second, we ask whether the loss is instructional or structural, and propose a structural remedy: representing remembered figures as XBRL-style facts — a value plus mandatory entity, period and unit context — so qualifiers become schema fields rather than prose, with retrieval matched on context. Financial reporting already mandates this representation; agent memory discards it. An instructed summariser serves as the control.
+**Aims.** The study has two parts. First, we quantify five failure modes — dilution, error propagation, staleness, cross-entity contamination, and loss at handoff — and localise where qualifiers are lost. Second, we ask whether the loss is instructional or structural, and propose a structural remedy: representing remembered figures as typed facts carrying mandatory entity, period and unit context, so qualifiers become schema fields rather than prose, with retrieval matched on context. Financial reporting already mandates such a representation — XBRL — while agent memory discards it. An instructed summariser serves as the control.
 
 **Methods.** We evaluate on ConvFinQA and FinQA: multi-turn analyst conversations over S&P 500 annual reports, 1999–2019, whose identifiers carry company and year, so cross-period and cross-entity conditions arise naturally. Because conversations average under four turns — too short to trigger summarisation — we chain same-company conversations into sessions of fifteen to twenty. Identical question sets run through a two-agent pipeline — retrieval and analysis, sharing memory — under five conditions: no memory (floor); a widely used memory library at its shipped defaults; the same library with qualifier-preserving summarisation instructions; with structured fact schemas and entity-scoped storage; and full history without summarisation (ceiling). Correctness is verified numerically against executed reference answers.
 
@@ -37,7 +37,7 @@
 
 ---
 
-*Word count (abstract body): 498 — 2 words under the limit*
+*Word count (abstract body): 499 — 1 words under the limit*
 
 ## Reviewer questions to expect
 
