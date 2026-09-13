@@ -390,6 +390,43 @@ This matters more than it sounds. The paper's credibility rests on the reader tr
 
 **Reflected in the abstract** as a specific, falsifiable prediction rather than a hedge: *"We expect prompt-level fixes alone to prove insufficient — the summary budget is fixed and each round re-compresses the last — with structured storage needed to close the gap."*
 
+## 9d. The method contribution — XBRL fact-context as a memory schema
+
+**Problem it solves.** Until 13 Sep the paper had **no method contribution**: the "remedy" was documented LangMem parameters. That is fine for feasibility and fatal for a reviewer asking *"what do you propose?"* — and it made the paper circular, since the diagnosis blamed the prompt and the remedy was a prompt.
+
+**The proposal.** The diagnosis — *a figure needs its context and prose cannot carry it* — points at a representation financial reporting already mandates.
+
+In **XBRL**, a fact is never a bare number. It is `value + context`, and context is required:
+
+| XBRL context | Our qualifier |
+|---|---|
+| Entity identifier | entity |
+| Period (instant **or** duration) | period |
+| Unit | scale |
+| Dimensions | basis |
+
+> **Agent memory for financial figures should store XBRL-style facts — value plus mandatory context — with retrieval matched on context.**
+
+**Why this beats "add some fields":** it gives a **principled answer to which qualifiers are mandatory, and when.** Revenue needs period + entity + unit; a ratio needs period + entity but no unit; a rate needs an *instant*, not a duration. The standard specifies this — we adopt a taxonomy rather than inventing one. Every number in every filing already carries it.
+
+**Honest positioning: an adaptation, not an invention.** The contribution is that **the domain has a solved representation for exactly this problem and agent memory discards it.**
+
+### Novelty check, 13 Sep
+
+XBRL + LLM work exists but is all about **reading** XBRL, not using its model as memory:
+
+| Work | What it does |
+|---|---|
+| **XBRL-Agent** (ICAIF 2024, ACM 10.1145/3677052.3698614) | LLM agent that *analyses* XBRL reports |
+| **FinTagging** | benchmark for *extracting and tagging* facts into XBRL |
+| **AuditFlow** ([2606.03031](https://arxiv.org/pdf/2606.03031)) | symbolic verification of structured financial reporting |
+
+**None uses the fact-context model as an agent memory representation.** Adjacent and worth citing: *From Prompts to Contracts: Harness Engineering for Auditable Enterprise LLM Agents* ([2607.08028](https://arxiv.org/pdf/2607.08028)), and the Deterministic State Store / Generative Context split in audit-oriented agent design.
+
+### Consequence for the experiment
+
+Condition **3c** is no longer "a Pydantic schema with some fields" — it is **an XBRL-derived fact schema**, and the required-field set is **metric-conditional** rather than uniform. The instructed summariser (3b) is the **control arm**, not the remedy.
+
 ## 10. Framing requirement
 
 **Lead with decision risk, not mechanism.** Not *"memory loses qualifiers"* but:
