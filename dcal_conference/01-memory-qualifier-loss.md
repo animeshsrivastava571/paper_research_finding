@@ -356,6 +356,21 @@ The paper assumes LangMem's defaults measurably damage financial figures. **If s
 
 Run it **before** committing to the full paper — but not before the abstract, which is design-stage and due in 7 days regardless.
 
+## 9b. Writing discipline — assert only what is verifiable
+
+Caught during the abstract sanity pass: an earlier draft stated *"Summarisation discards them"* in the Need section while Expected findings said *"we expect qualifier retention to fall."* **Internally inconsistent** — if it is already established, why measure it? A reviewer asks exactly that.
+
+**The rule for the whole paper:**
+
+| Claim type | How to state it |
+|---|---|
+| **Verifiable now** — e.g. LangMem's default prompt contains no instruction to preserve numbers, units or dates | assert it plainly. *"Default summarisation prompts never mention them."* Checkable in the source |
+| **Mechanism / reasoning** — why a compressor would drop them | assert as reasoning. *"To a compressor, qualifiers read as redundancy."* |
+| **Logical consequence** — what an unqualified figure is | assert. *"An unqualified figure can be literally correct and still mislead."* |
+| **Our unmeasured result** — whether qualifiers are in fact lost, and how often | **hedge.** *"We expect…"* Never state as fact before the measurement exists |
+
+This matters more than it sounds. The paper's credibility rests on the reader trusting the separation between what was *found in the source* and what was *found in the experiment*. Blurring them once invites doubt about everything else.
+
 ## 10. Framing requirement
 
 **Lead with decision risk, not mechanism.** Not *"memory loses qualifiers"* but:
