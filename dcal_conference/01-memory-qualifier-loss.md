@@ -371,6 +371,25 @@ Caught during the abstract sanity pass: an earlier draft stated *"Summarisation 
 
 This matters more than it sounds. The paper's credibility rests on the reader trusting the separation between what was *found in the source* and what was *found in the experiment*. Blurring them once invites doubt about everything else.
 
+## 9c. The strongest objection — "why not just write a better prompt?"
+
+**Expect this from a reviewer.** If LangMem's default summary prompt is the problem, and LangMem lets you override it, then the paper reads as *"we found a suboptimal default that the docs already tell you how to change."*
+
+**Three answers, in order of strength:**
+
+**1. We test whether the better prompt actually works — and expect it to fail partially.** This is the real answer. Condition 3b *is* the better prompt. Three mechanical reasons it should be insufficient alone:
+- `max_summary_tokens` defaults to **256** — under a fixed budget something must go, whatever the prompt asks for
+- **each round re-summarises the previous summary**, not the original, so a prompt applied at round 1 cannot protect what round 3 drops
+- `RunningSummary.summary` is a **flat `str`** — there is nowhere structured to put a qualifier; it survives only as prose, where the next round can drop it
+
+**If prompting were sufficient this would be a short and boring paper. The interesting result is where it fails**, and that is what motivates the structured-schema condition (3c).
+
+**2. A prompt does nothing for three of the five failure modes.** Cross-company bleed is the `namespace` default (user-scoped, not entity-scoped). Handoff loss is a different compression point entirely. Cross-session staleness lives in the store. **Only dilution and error propagation are summariser-side.** The other three live in the store and the graph.
+
+**3. Defaults are what gets deployed.** *"You could have configured it better"* is true of nearly every production failure; the question is how many practitioners know to. Quantifying the cost of the default is precisely what tells them.
+
+**Reflected in the abstract** as a specific, falsifiable prediction rather than a hedge: *"We expect prompt-level fixes alone to prove insufficient — the summary budget is fixed and each round re-compresses the last — with structured storage needed to close the gap."*
+
 ## 10. Framing requirement
 
 **Lead with decision risk, not mechanism.** Not *"memory loses qualifiers"* but:
