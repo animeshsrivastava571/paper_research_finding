@@ -22,6 +22,28 @@ The general principle, and the reason this is a *finance* paper rather than a ge
 
 *"Revenue was 233"* is not a fact until you know the **period**, **entity**, **scale** ($233m vs $233bn — wrong by 1000×), **currency**, **basis** (reported vs adjusted, GAAP vs IFRS), and **consolidation level**. Accounting standards *are* rules about which qualifiers a number must carry. Finance has an unusually dense set of them; a summariser trained to be concise strips exactly these, because they read like clutter.
 
+## 1b. Three families of harm — the organising frame *(added 13 Sep)*
+
+The five failure modes are not a flat list. They are **three kinds of harm** compression causes, and the distinction determines what the remedy can and cannot fix.
+
+| Family | Mode(s) | What compression does |
+|---|---|---|
+| **Omission** | dilution | drops what should have been kept |
+| **Corruption** | error propagation | carries a wrong value forward |
+| **Decontextualisation** | staleness, cross-entity contamination, handoff loss | keeps the value, strips what makes it mean anything |
+
+**Three things this buys:**
+
+1. **Every mode gets set up.** Previously dilution and error propagation appeared in the Aims with no explanation in Need — a reader met the terms cold.
+2. **It explains why the remedy covers three of five.** Typed facts fix **decontextualisation**. Omission and corruption need different treatment. Stated openly this is a *finding*, not a gap — and it sets up future work. Measuring more than you fix is normal and honest.
+3. **It isolates what is finance-specific.** Omission and corruption occur in any domain. **Decontextualisation is where finance is unusual**, because accounting mandates that a figure carry its entity, period and unit. That is the defensible territory, and the taxonomy makes it visible rather than implicit.
+
+**The answer to "why measure what you don't fix":**
+
+> Compression harms in three ways and only one is specific to finance. We measure all three and remedy the one the domain already has a standard for.
+
+**Record of a bad call:** an earlier review recommended *narrowing* to three qualifier-loss modes for coherence. That was optimising tidiness over substance — five measured modes is more empirical contribution, which is the currency at an applied venue. Animesh pushed back and was right.
+
 ## 2. The four failure modes
 
 **Short-term memory — within one conversation**
