@@ -319,6 +319,15 @@ It matches production reality (real financial systems are multi-agent), it broad
 - **ConvFinQA** — `github.com/czyssrs/ConvFinQA`, EMNLP 2022. 3,037 / 421 / 434 conversations; conversation- and turn-level. Ships a 17.5 MB `data.zip`.
 - **FinQA** — `github.com/czyssrs/FinQA`, **CC-BY-4.0**, S&P 500 earnings reports **1999–2019**. Plain JSON (train 78 MB).
 
+### Dataset sizes — verified 13 Sep
+
+| | Size | Role |
+|---|---|---|
+| **ConvFinQA** | 3,892 conversations (train 3,037 / dev 421 / test 434); **14,115 turns** (11,104 / 1,490 / 1,521) | **multi-turn — the evaluation set.** All experiments run here |
+| **FinQA** | ~8,281 QA pairs (dev **883**, test **1,147** counted directly; train is the 78 MB file) | **single-turn — the source corpus.** ConvFinQA is built from it and inherits its documents and `TICKER/YEAR` ids |
+
+⚠️ **FinQA is not conversational.** An earlier abstract draft described both as "analyst conversations", which was wrong. ConvFinQA supplies the multi-turn structure the whole design depends on; FinQA supplies the report corpus, the id convention, and a larger pool for constructing cross-period pairs when ConvFinQA alone yields too few at a ≥5-year gap.
+
 **Checks run 12 Sep 2026:**
 
 **No structured fiscal-period field.** But FinQA ids follow the FinTabNet convention, verified on real records:
