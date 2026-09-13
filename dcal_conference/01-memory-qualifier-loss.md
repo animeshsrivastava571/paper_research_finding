@@ -319,6 +319,56 @@ It matches production reality (real financial systems are multi-agent), it broad
 - **ConvFinQA** — `github.com/czyssrs/ConvFinQA`, EMNLP 2022. 3,037 / 421 / 434 conversations; conversation- and turn-level. Ships a 17.5 MB `data.zip`.
 - **FinQA** — `github.com/czyssrs/FinQA`, **CC-BY-4.0**, S&P 500 earnings reports **1999–2019**. Plain JSON (train 78 MB).
 
+### Worked example + coverage figures — measured from the data, 13 Sep
+
+Downloaded `data.zip` and inspected it directly. A real record:
+
+**`id: Single_MRO/2007/page_134.pdf-1`** — Marathon Oil, 2007 report.
+
+```
+                                          2007      2006      2005
+weighted average exercise price/share    $ 60.94   $ 37.84   $ 25.14
+expected volatility                        27%       28%       28%
+```
+
+| Turn | Question | `exe_ans` |
+|---|---|---|
+| 0 | what was the weighted average exercise price per share in **2007**? | 60.94 |
+| 1 | and what was **it** in 2005? | 25.14 |
+| 2 | what was, then, **the change** over the years? | 35.8 |
+| 3 | what was the weighted average exercise price per share in 2005? | 25.14 |
+| 4 | and how much does **that change** represent in relation to **this 2005**…? | 1.42403 |
+
+**Three properties this confirms:**
+
+1. **Turn 1 is the qualifier problem live.** *"and what was **it** in 2005?"* never names the metric — it exists only in turn 0. If summarisation drops "weighted average exercise price per share", turn 1 becomes unanswerable.
+2. **Error propagation is native to the data**, not induced. Turns 2 and 4 depend on earlier answers.
+3. **The dependency graph is machine-readable.** `turn_program` for turn 4 is `subtract(60.94, 25.14), divide(#0, 25.14)` — `#0` references turn 2. **Dependent vs independent turns can be separated programmatically**, which is exactly what the error-propagation measurement needs. Free.
+
+`exe_ans_list` confirms **per-turn numeric ground truth**.
+
+### Measured coverage (train + dev, 3,458 conversations)
+
+| Metric | Value |
+|---|---|
+| ids parsed to `TICKER/YEAR` | **3,458 / 3,458 (100%)** |
+| distinct companies | 133 |
+| **companies with a ≥5-year span** | **89** |
+| **candidate cross-period year pairs (≥5yr gap)** | **964** |
+| turns per conversation | mean **3.64**, max 9 |
+| chaining 5 conversations | **~18 turns** |
+
+**This de-risks two open concerns:**
+- *"Cross-period pairs might be too thin"* — **964 candidate pairs across 89 companies.** Ample.
+- *"Will chaining reach 15–20 turns?"* — **5 conversations ≈ 18 turns.** Exactly the target, no padding needed.
+
+⚠️ **Parser detail:** ConvFinQA ids carry a **`Single_` / `Double_` prefix** (300/121 in dev) that FinQA ids do not. Strip it before parsing `TICKER/YEAR`:
+
+```python
+core = i.split('_',1)[1] if '_' in i.split('/')[0] else i
+m = re.match(r'([A-Z0-9.\-]+)/(\d{4})/', core)
+```
+
 ### Dataset sizes — verified 13 Sep
 
 | | Size | Role |
