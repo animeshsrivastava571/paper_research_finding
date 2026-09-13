@@ -11,7 +11,13 @@
 
 ## Title
 
-**When the Agent Remembers the Wrong Year: Measuring Memory-Induced Errors in Financial Document Analysis**
+**When the Number Loses Its Label: Measuring Memory-Induced Errors in Financial Document Analysis**
+
+*Alternatives considered:*
+- *"Revenue Was 233": Measuring Qualifier Loss in Conversational Financial Document Analysis* — uses the paper's own example as the hook; more memorable, slightly riskier with a conservative reviewer
+- *Measuring Qualifier Loss in Agent Memory for Financial Document Analysis* — plain and safe, no hook
+
+*Rejected: "When the Agent Remembers the Wrong Year…" — too narrow. The scope is three qualifier types (period, entity, scale), not just the year, and scale errors are the more dangerous ones.*
 
 ---
 
