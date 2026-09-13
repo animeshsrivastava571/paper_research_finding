@@ -49,8 +49,12 @@ Presenting ≠ publishing in IMR: only selected work is invited, and an invitati
 | # | Idea | Status |
 |---|---|---|
 | [01](01-memory-qualifier-loss.md) | Memory-induced failure modes in financial document agents | ✅ **SELECTED** — abstract drafted, see [`abstract-baiconf2026.md`](abstract-baiconf2026.md) |
-| [02](02-reason-aware-non-answers.md) | Reason-aware non-answers in earnings call Q&A | candidate, future venue — unverified licence + novelty |
-| [03](03-completion-metric-agreement.md) | Do agent task-completion metrics agree on financial tasks? | candidate, future venue — novelty unchecked |
+
+Two other candidates were drafted and **removed from this folder on 13 Sep to avoid confusion** — they were never for this deadline. Both remain recoverable in git history (commit `d9dee66`) and are summarised in the plan file:
+- **02 — reason-aware non-answers in earnings call Q&A.** Best story, biggest public data; blocked on an unverified S&P Capital IQ redistribution licence and an unchecked novelty claim.
+- **03 — do agent task-completion metrics agree on financial tasks?** Most applied; requires building a multi-agent system before any measurement, and novelty unchecked.
+
+Revisit for FinNLP / ICAIF, not BAICONF.
 
 **Why 01 was selected:** it is the only candidate that has been **verified**. Data checked (FinQA ids carry `TICKER/YEAR`, ~6 of 8 questions name their year, ≥5-year gap rule established, `store.search` filtering confirmed), LangMem source read line by line, novelty position examined repeatedly. 02 and 03 are where 01 was three days ago — promising and unexamined. With six days to the deadline, trading a de-risked candidate for two unexamined ones is a bad trade.
 
