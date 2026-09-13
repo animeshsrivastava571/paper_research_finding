@@ -48,7 +48,7 @@ Presenting ≠ publishing in IMR: only selected work is invited, and an invitati
 
 | # | Idea | Status |
 |---|---|---|
-| [01](01-memory-qualifier-loss.md) | Memory-induced failure modes in financial document agents | ✅ **SELECTED** for BAICONF 2026 (12 Sep, confirmed 13 Sep) |
+| [01](01-memory-qualifier-loss.md) | Memory-induced failure modes in financial document agents | ✅ **SELECTED** — abstract drafted, see [`abstract-baiconf2026.md`](abstract-baiconf2026.md) |
 | [02](02-reason-aware-non-answers.md) | Reason-aware non-answers in earnings call Q&A | candidate, future venue — unverified licence + novelty |
 | [03](03-completion-metric-agreement.md) | Do agent task-completion metrics agree on financial tasks? | candidate, future venue — novelty unchecked |
 
