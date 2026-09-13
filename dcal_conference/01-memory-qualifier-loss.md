@@ -268,6 +268,24 @@ Small — one additional node in the LangGraph graph plus the handoff payload. B
 - Qualifier retention is measured at **each** stage: tool output → retrieval agent's restatement → **handoff** → analysis agent's answer → summary → later retrieval
 - The §5d extraction-and-compare check runs at each of those points, which is what localises the loss
 
+### ⚠️ Use a DOCUMENTED handoff pattern, not a bespoke one
+
+**This protects the paper's strongest property.** The rest of the design measures **shipped defaults** — LangMem's bare summary prompt, its user-scoped namespace. Objective artefacts we found rather than chose. That is what makes the finding hard to argue with.
+
+**The handoff is different: we design it.** A reviewer can fairly say *"you chose how the agents pass information, so you chose the result."* That criticism does not apply to the single-agent version.
+
+**So use LangGraph's shipped supervisor / handoff primitives as documented. Do not hand-roll the handoff summarisation.** Then we are still measuring a default — just a second one.
+
+### Scope protection
+
+Five modes × five conditions × two agents × six measurement points, in six weeks. The danger is not impossibility — it is doing all of it shallowly rather than some of it well.
+
+| | |
+|---|---|
+| **Cut first** | model-size axis; `max_summary_tokens` sweep; basis and temporal-scope qualifiers |
+| **Cut last** | the handoff measurement — it justifies the title |
+| **Never cut** | the correctness gate |
+
 ### Why it is worth the scope increase
 
 It matches production reality (real financial systems are multi-agent), it broadens the audience at a venue whose workshop programme includes Agentic AI, and it sharpens the compounding argument — each summary re-summarises the previous summary, and each handoff re-compresses again.
