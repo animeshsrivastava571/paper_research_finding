@@ -142,6 +142,54 @@ Within a session there is a real choice: **pass the full state every turn** (Lan
 
 The §4b long-session work targets the *within-session* module. The cross-year work targets the *across-session* module. Two experiments, two modules, four failure modes.
 
+## 4d. Source verified against the INSTALLED package — 16 Sep 2026 ✅
+
+Earlier claims were read from GitHub `main` on 12 Sep. Re-verified against the package actually installed in `.venv`. **Every claim holds.**
+
+### Versions to pin in the paper
+
+```
+langmem               0.0.30
+langgraph             1.2.11
+langgraph-checkpoint  4.2.0
+langchain-core        1.6.3
+python                3.12.7
+```
+
+### STM — all verified in `langmem/short_term/summarization.py`
+
+| Claim | Evidence |
+|---|---|
+| Default prompt never mentions numbers, dates or units | `"Create a summary of the conversation above:"` |
+| Each round re-compresses the **previous summary** | `"Extend this summary by taking into account the new messages above:"` |
+| Nowhere for a qualifier to live | `RunningSummary.summary: str` — flat string |
+| Fixed budget | `max_summary_tokens = 256` |
+| **No preservation mechanism exists** | grep for `preserve\|pin_\|exclude_\|protect` → **0 matches** |
+| System message is exempt | line 123, `isinstance(messages[0], SystemMessage)` → `messages = messages[1:]` |
+| Pinning costs budget one-for-one | line 128, `max_remaining_tokens -= token_counter([existing_system_message])` |
+
+### LTM — all verified in `langmem/knowledge/extraction.py`
+
+| Parameter | Default |
+|---|---|
+| `schemas` | `None` — unstructured |
+| default `Memory` model | `{content: str}` — a bare string |
+| `namespace` | `('memories', '{langgraph_user_id}')` — **user-scoped, not entity-scoped** |
+| `enable_deletes` | `False` |
+| `query_limit` | `5` |
+
+### 🔑 NEW FINDING — the LTM default instructions actively instruct terseness
+
+The `create_memory_store_manager` default `instructions` is a long prompt not previously read. It contains:
+
+> *"Consolidate and **compress** redundant memories to maintain information-density; strengthen based on reliability and recency; **maximize SNR by avoiding idle words.**"*
+
+**This is stronger evidence than anything we had.** For STM the claim is that the prompt *fails to protect* qualifiers. For LTM the default prompt **actively instructs the model to drop what it judges to be noise** — and to a compressor, *"(FY2015, $ millions)"* is exactly what "idle words" looks like.
+
+Also present: *"Prefer dense, complete memories over overlapping ones."*
+
+**Use this in the paper body**, not the abstract — the abstract's argument is structural (*"nowhere for a qualifier to live"*), which is stronger and more general than a prompt-wording argument. This quote is supporting evidence for the mechanism section.
+
 ## 5. The fix — three settings, no fork
 
 LangMem source read from `main`, 12 Sep 2026 (MIT, 1,660 stars, pushed 2026-09-09). **Everything we vary is an injectable parameter.**
