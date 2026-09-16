@@ -22,6 +22,14 @@ The general principle, and the reason this is a *finance* paper rather than a ge
 
 *"Revenue was 233"* is not a fact until you know the **period**, **entity**, **scale** ($233m vs $233bn — wrong by 1000×), **currency**, **basis** (reported vs adjusted, GAAP vs IFRS), and **consolidation level**. Accounting standards *are* rules about which qualifiers a number must carry. Finance has an unusually dense set of them; a summariser trained to be concise strips exactly these, because they read like clutter.
 
+## 1a. Naming: "handoff" is the title's concept, not a mode
+
+**The title's "handoff" means the general idea** — information passing between stages and losing something each time. The pipeline is a chain of handoffs (`tool → agent → summary → summary → store → retrieval → other agent`) and the paper's distinctive contribution is **localising loss at each of them**.
+
+**The fifth failure mode is therefore named `agent-boundary loss`, not "handoff loss."** Using "handoff" for both created a collision: a reader met the title expecting a paper about the agent boundary, then found it was one mode of five.
+
+Keep this separation in all writing.
+
 ## 1b. Three families of harm — the organising frame *(added 13 Sep)*
 
 The five failure modes are not a flat list. They are **three kinds of harm** compression causes, and the distinction determines what the remedy can and cannot fix.
@@ -30,7 +38,7 @@ The five failure modes are not a flat list. They are **three kinds of harm** com
 |---|---|---|
 | **Omission** | dilution | drops what should have been kept |
 | **Corruption** | error propagation | carries a wrong value forward |
-| **Decontextualisation** | staleness, cross-entity contamination, handoff loss | keeps the value, strips what makes it mean anything |
+| **Decontextualisation** | staleness, cross-entity contamination, agent-boundary loss | keeps the value, strips what makes it mean anything |
 
 **Three things this buys:**
 
@@ -329,7 +337,7 @@ retrieval agent  ──handoff──▶  analysis agent
 
 1. **A new compression point.** The handoff is another place qualifiers are dropped — the retrieval agent summarises for the analysis agent, independently of LangMem's own summarisation. Loss now compounds across *rounds* **and** *handoffs*.
 2. **A new blast radius.** With shared memory, one agent's qualifier loss corrupts *another agent's* output. The error crosses an ownership boundary — which in a bank is a different class of problem from a single agent being wrong.
-3. **A fifth failure mode: handoff loss.** The other four (dilution, error propagation, staleness, cross-entity contamination) are unchanged.
+3. **A fifth failure mode: agent-boundary loss.** The other four (dilution, error propagation, staleness, cross-entity contamination) are unchanged.
 
 ### Build cost
 
@@ -513,7 +521,7 @@ This matters more than it sounds. The paper's credibility rests on the reader tr
 
 **If prompting were sufficient this would be a short and boring paper. The interesting result is where it fails**, and that is what motivates the structured-schema condition (3c).
 
-**2. A prompt does nothing for three of the five failure modes.** Cross-company bleed is the `namespace` default (user-scoped, not entity-scoped). Handoff loss is a different compression point entirely. Cross-session staleness lives in the store. **Only dilution and error propagation are summariser-side.** The other three live in the store and the graph.
+**2. A prompt does nothing for three of the five failure modes.** Cross-company bleed is the `namespace` default (user-scoped, not entity-scoped). Agent-boundary loss is a different compression point entirely. Cross-session staleness lives in the store. **Only dilution and error propagation are summariser-side.** The other three live in the store and the graph.
 
 **3. Defaults are what gets deployed.** *"You could have configured it better"* is true of nearly every production failure; the question is how many practitioners know to. Quantifying the cost of the default is precisely what tells them.
 
